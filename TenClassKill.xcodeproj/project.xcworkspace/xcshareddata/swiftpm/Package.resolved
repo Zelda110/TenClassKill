@@ -1,0 +1,51 @@
+{
+  "originHash" : "7988930e24cf7179d8e10e1c27de0900381514ff009091865c9932d102758ad6",
+  "pins" : [
+    {
+      "identity" : "gateengine",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/STREGAsGate/GateEngine",
+      "state" : {
+        "revision" : "152e608cae6187bdd76008bd14d4008a713df382",
+        "version" : "0.2.1"
+      }
+    },
+    {
+      "identity" : "javascriptkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftwasm/JavaScriptKit.git",
+      "state" : {
+        "revision" : "5148e4f6fa7d5372e3fde867ab03a6f9993ca066",
+        "version" : "0.22.3"
+      }
+    },
+    {
+      "identity" : "swift-atomics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-atomics.git",
+      "state" : {
+        "revision" : "6c89474e62719ddcc1e9614989fff2f68208fe10",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
+        "version" : "1.1.4"
+      }
+    },
+    {
+      "identity" : "webapikit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftwasm/WebAPIKit.git",
+      "state" : {
+        "revision" : "8508bf2e0d0c743869383384589c20db7d62d14a",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}
