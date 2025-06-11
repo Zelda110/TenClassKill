@@ -11,7 +11,7 @@ import SwiftUI
 struct TenClsKillApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GameUI()
         }
     }
 }

@@ -6,14 +6,24 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		345397C22DF9A67100AD6B35 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 345397C12DF9A67100AD6B35 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		34387E5D2DF989FD00F2DB1B /* TenClsKill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TenClsKill.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		345397C12DF9A67100AD6B35 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		34387E5F2DF989FD00F2DB1B /* TenClsKill */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TenClsKill;
+			sourceTree = "<group>";
+		};
+		3453972C2DF9A5F100AD6B35 /* develop resource */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "develop resource";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +42,8 @@
 		34387E542DF989FD00F2DB1B = {
 			isa = PBXGroup;
 			children = (
+				345397C12DF9A67100AD6B35 /* README.md */,
+				3453972C2DF9A5F100AD6B35 /* develop resource */,
 				34387E5F2DF989FD00F2DB1B /* TenClsKill */,
 				34387E5E2DF989FD00F2DB1B /* Products */,
 			);
@@ -62,6 +74,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				34387E5F2DF989FD00F2DB1B /* TenClsKill */,
+				3453972C2DF9A5F100AD6B35 /* develop resource */,
 			);
 			name = TenClsKill;
 			packageProductDependencies = (
@@ -109,6 +122,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				345397C22DF9A67100AD6B35 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,7 +292,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
@@ -321,7 +335,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
