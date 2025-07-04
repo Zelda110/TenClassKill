@@ -7,7 +7,7 @@
 
 import Foundation
 
-//武将
+//武將
 class General {
     init(
         name: String,
@@ -31,23 +31,23 @@ class General {
         self.gender = gender
     }
 
-    //武将名
+    //武將名
     let name: String
 
-    //体力值
+    //體力值
     let health: Int
     let max_health: Int
     let shield: Int
-    //技能组
+    //技能組
     let skills: [SkillGroup]
 
-    //武将牌
+    //武將牌
     let card: GeneralCard
-    //将包
+    //將包
     let set: GeneralSet
-    //势力
+    //勢力
     let subject: Subject
-    //性别
+    //性別
     let gender: Gender
 
     func get_image() -> String {
@@ -56,45 +56,45 @@ class General {
 }
 
 let WCY = General(
-    name: "王成悦",
+    name: "王成悅",
     health: 2,
     max_health: 3,
-    skills: [回血,失血],
+    skills: [],
     card: .wcy,
-    set: .标准包,
+    set: .標準包,
     subject: .BIOLOGY,
     gender: .male
 )
 
 let LQE = General(
-    name: "刘奇恩",
+    name: "劉奇恩",
     health: 4,
     max_health: 4,
     skills: [],
     card: .lqe,
-    set: .标准包,
+    set: .標準包,
     subject: .MATH,
     gender: .male
 )
 
 let LCY = General(
-    name: "刘宸驿",
+    name: "劉宸驛",
     health: 4,
     max_health: 4,
     skills: [],
     card: .lcy,
-    set: .标准包,
+    set: .標準包,
     subject: .INFORMATICS,
     gender: .male
 )
 
 let ZWX = General(
-    name: "张文轩",
+    name: "張文軒",
     health: 3,
     max_health: 3,
     skills: [],
     card: .zwx,
-    set: .标准包,
+    set: .標準包,
     subject: .BIOLOGY,
     gender: .male
 )

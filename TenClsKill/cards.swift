@@ -30,12 +30,12 @@ class Card {
     //全局id
     static var card_id: Int = 0
     let id: Int
-    //花色点数
+    //花色點數
     var suit: Suit
     var number: Int
     //牌名
     var name: CardName
-    //本体(若为转化牌)
+    //本體(若為轉化牌)
     var realCard: Card?
     //是否可用
     var can_use:Bool = false

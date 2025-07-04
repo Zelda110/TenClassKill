@@ -20,20 +20,19 @@ let general_card_height = 1534 * card_scale + 180 * card_scale
 let game_card_width = 1024 * card_scale
 let game_card_height = 1438 * card_scale
 
-//主游戏的视图模型
+//主遊戲的視圖模型
 @MainActor
 class GameViewModel: ObservableObject {
     let player_num = 3
     @Published var players: [Player] = []
-    @Published var round_num = 0  //轮次
-    @Published var now_player = 0  //当前回合玩家
-    @Published var operating_player: Int = 0  //本机操作玩家
+    @Published var round_num = 0  //輪次
+    @Published var now_player = 0  //當前回合玩家
+    @Published var operating_player: Int = 0  //本機操作玩家
     @Published var cardList = CardList()  //牌堆
-    @Published var discardedList = CardList()  //弃牌堆
-    @Published var dealingList = CardList()  //处理区
-    @Published var records: [Record] = []  //记录
-    @Published var now_action: Action = GameStart(parent: nil)  //当前操作
-    @Published var chooses: [Chose] = []  //选择
+    @Published var discardedList = CardList()  //棄牌堆
+    @Published var dealingList = CardList()  //處理區
+    @Published var records: [Record] = []  //記錄
+    @Published var now_action: Action = GameStart(parent: nil)  //當前操作
     @Published var handcards: [[Card]] = []  //手牌
 
     var game = MainGame(player_num: 3)
@@ -47,7 +46,6 @@ class GameViewModel: ObservableObject {
         self.dealingList = self.game.dealingList
         self.records = self.game.records
         self.now_action = self.game.now_action
-        self.chooses = self.game.chooses
         for player in players {
             self.handcards.append(player.areas[Area.HANDCARD.rawValue].cardlist)
         }
@@ -62,7 +60,6 @@ class GameViewModel: ObservableObject {
             self.dealingList = self.game.dealingList
             self.records = self.game.records
             self.now_action = self.game.now_action
-            self.chooses = self.game.chooses
             self.handcards = []
             for player in self.game.players {
                 self.handcards
@@ -74,29 +71,23 @@ class GameViewModel: ObservableObject {
 
 }
 
-//主游戏
+//主遊戲
 struct GameUI: View {
     var body: some View {
         InGameUI()
     }
 }
 
-//游戏界面
+//遊戲界面
 struct InGameUI: View {
     @State var view_record = false
     @StateObject var game = GameViewModel()
     var body: some View {
         GeometryReader { geo in
-            //游戏主界面
+            //遊戲主界面
             ZStack {
                 VStack {
                     Spacer()
-                    //选择界面
-                    if !game.chooses.isEmpty {
-                        if game.chooses[0].player == game.operating_player {
-                            ChooseUI(chose: game.chooses[0])
-                        }
-                    }
                     //手牌
                     HStack {
                         CardListUI(
@@ -107,7 +98,7 @@ struct InGameUI: View {
                         Spacer()
                     }
                 }.frame(width: geo.size.width - 2 * general_card_width)
-                //武将牌
+                //武將牌
                 ZStack {
                     ForEach(game.players, id: \.seat) { i in
                         GeneralCardUI(
@@ -133,15 +124,15 @@ struct InGameUI: View {
                     }
                 }
             }
-            //记录显示
+            //記錄顯示
             if view_record {
                 RecordUI(view_record: $view_record, game: game)
             }
-            //功能按钮
+            //功能按鈕
             VStack {
                 Spacer()
                 HStack {
-                    Button("记录") {
+                    Button("記錄") {
                         withAnimation {
                             view_record = !view_record
                         }
@@ -166,12 +157,12 @@ struct InGameUI: View {
                 .resizable()
                 .ignoresSafeArea()
                 .aspectRatio(contentMode: .fill)
-        }  //背景图片
+        }  //背景圖片
         .onAppear {
             Task.detached {
                 await game.game.start()
             }
-        }  //游戏主进程
+        }  //遊戲主進程
     }
 }
 
@@ -185,7 +176,7 @@ func getVerticalName(name: String) -> String {
 
 }
 
-//武将牌UI
+//武將牌UI
 struct GeneralCardUI: View {
     var player: Player
     var operating_player: Int
@@ -197,16 +188,16 @@ struct GeneralCardUI: View {
         GeometryReader { geo in
             VStack {
                 ZStack(alignment: .leading) {
-                    //原画
+                    //原畫
                     Image("\(card_id)")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                     ZStack(alignment: .top) {
-                        //侧边栏
+                        //側邊欄
                         Rectangle()
                             .foregroundColor(Color(player.subject.rawValue))
                         VStack {
-                            //势力标记
+                            //勢力標記
                             Image(player.subject.rawValue)
                                 .resizable()
                                 .scaledToFit()
@@ -216,14 +207,14 @@ struct GeneralCardUI: View {
                                 .shadow(radius: 10)
                                 .font(.system(size: 13))
                             Spacer(minLength: 0)
-                            //体力值
+                            //體力值
                             VStack(spacing: 0) {
                                 let health = player.health
                                 let max_health = player.max_health
                                 let shield = player.shield
-                                //图形显示
+                                //圖形顯示
                                 if shield + max_health <= 5 && health >= 0 {
-                                    //体力
+                                    //體力
                                     ForEach(
                                         0..<shield,
                                         id: \.self
@@ -249,7 +240,7 @@ struct GeneralCardUI: View {
                                             .scaledToFit()
                                     }
                                 }
-                                //文字显示
+                                //文字顯示
                                 else {
                                     Text(
                                         String(health)
@@ -274,7 +265,7 @@ struct GeneralCardUI: View {
                 .cornerRadius(5)
                 VStack {
                     //座次
-                    Text("\(player.seat+1)号位")
+                    Text("\(player.seat+1)號位")
                         .foregroundColor(.white)
                         .font(.system(size: 13))
                         .shadow(radius: 10)
@@ -297,7 +288,7 @@ struct GeneralCardUI: View {
     }
 }
 
-//获取各玩家武将排列位置
+//獲取各玩家武將排列位置
 func getGeneralUiPosition(game: GameViewModel, geo: GeometryProxy, index: Int)
     -> CGPoint
 {
@@ -308,7 +299,7 @@ func getGeneralUiPosition(game: GameViewModel, geo: GeometryProxy, index: Int)
     let l1 = max(Double(geo.size.height - general_card_height), 0)  //右
     let l2 = max(Double(geo.size.width - general_card_width), 0)  //上
     let l3 = Double(geo.size.height)  //左
-    let dl = (l1 + l2 + l3) / Double(game.player_num)  //两张牌间的差值
+    let dl = (l1 + l2 + l3) / Double(game.player_num)  //兩張牌間的差值
     let cx: Double
     let cy: Double
     if Double(index) * dl <= l1 {
@@ -326,16 +317,16 @@ func getGeneralUiPosition(game: GameViewModel, geo: GeometryProxy, index: Int)
     return CGPoint(x: cx, y: cy)
 }
 
-//游戏牌UI
+//遊戲牌UI
 struct GameCardUI: View {
     var card: Card
     var back_up = false  //是否背面朝上
     var body: some View {
         ZStack {
-            //图片
+            //圖片
             Image(back_up ? "card_bg" : "\(card.name.rawValue)")
                 .resizable()
-            //花色点数
+            //花色點數
             if !back_up {
                 HStack {
                     VStack(spacing: 0) {
@@ -371,7 +362,7 @@ struct CardListUI: View {
     var cardlist: [Card]
     var back_up = false  //是否背面朝上
     var width: Double
-    var scroolable: Bool = true  //是否可以滚动
+    var scroolable: Bool = true  //是否可以滾動
     var body: some View {
         if scroolable {
             ScrollView(.horizontal) {
@@ -399,7 +390,7 @@ struct CardListUI: View {
     }
 }
 
-//显示记录界面
+//顯示記錄界面
 struct RecordUI: View {
     @Binding var view_record: Bool
     @ObservedObject var game: GameViewModel
@@ -424,31 +415,7 @@ struct RecordUI: View {
     }
 }
 
-//选择界面
-struct ChooseUI: View {
-    var chose: Chose
-    var body: some View {
-        VStack {
-            Text(chose.text)
-            //                .background(.black)
-            HStack {
-                ForEach(chose.choses, id: \.1) { achose in
-                    Button(achose.0) {
-                        chose.choose(chosed: achose.1)
-                        for i in Action.mainGame!.chooses.indices {
-                            if Action.mainGame!.chooses[i].finished {
-                                Action.mainGame!.chooses.remove(at: i)
-                                break
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-//预览
+//預覽
 struct GameUI_Previews: PreviewProvider {
     static var previews: some View {
         GameUI()

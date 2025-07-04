@@ -14,16 +14,16 @@ struct GeneralView: View {
         let name = getVerticalName(name: general.name)
         HStack {
             ZStack(alignment: .leading) {
-                //原画
+                //原畫
                 Image("\(card_id)")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 ZStack(alignment: .top) {
-                    //侧边栏
+                    //側邊欄
                     Rectangle()
                         .foregroundColor(Color(general.subject.rawValue))
                     VStack {
-                        //势力标记
+                        //勢力標記
                         Image(general.subject.rawValue)
                             .resizable()
                             .scaledToFit()
@@ -33,14 +33,14 @@ struct GeneralView: View {
                             .shadow(radius: 10)
                             .font(.system(size: 13))
                         Spacer(minLength: 0)
-                        //体力值
+                        //體力值
                         VStack(spacing: 0) {
                             let health = general.health
                             let max_health = general.max_health
                             let shield = general.shield
-                            //图形显示
+                            //圖形顯示
                             if shield + max_health <= 5 && health >= 0 {
-                                //体力
+                                //體力
                                 ForEach(
                                     0..<shield,
                                     id: \.self
@@ -66,7 +66,7 @@ struct GeneralView: View {
                                         .scaledToFit()
                                 }
                             }
-                            //文字显示
+                            //文字顯示
                             else {
                                 Text(
                                     String(health)

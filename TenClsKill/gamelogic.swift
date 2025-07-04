@@ -6,13 +6,12 @@
 //
 
 import Foundation
-import SwiftUI
 
 func log(_ msg: String, _ importance: Int = 0) {
     print(msg)
 }
 
-//游戏类
+//遊戲類
 class MainGame {
     init(player_num: Int) {
         self.player_num = player_num
@@ -27,11 +26,11 @@ class MainGame {
         log("Game Inited")
     }
 
-    //开始游戏
+    //開始遊戲
     func start() async {
         notifyChange()
         Action.mainGame = self
-        let gameStart = GameStart(parent: nil)  //开始游戏操作
+        let gameStart = GameStart(parent: nil)  //開始遊戲操作
         self.now_action = gameStart
         Task{
             while true{
@@ -40,7 +39,7 @@ class MainGame {
             }
         }
         await gameStart.exe()
-    } 
+    }
 
     //生成牌堆
     func generate_cardlist() {
@@ -57,7 +56,7 @@ class MainGame {
         }
     }
 
-    //发初始手牌
+    //發初始手牌
     func giving_intital_card() {
         for _ in 0...3 {
             for player in players {
@@ -70,18 +69,17 @@ class MainGame {
         }
     }
 
-    let player_num: Int  //人数
+    let player_num: Int  //人數
     var players: [Player] = []
-    var round_num = 0  //轮次
-    var now_player = 0 //当前回合角色
+    var round_num = 0  //輪次
+    var now_player = 0 //當前回合角色
     var cardList = CardList()  //牌堆
-    var discardedList = CardList()  //弃牌堆
-    var dealingList = CardList()  //处理区
-    var records: [Record] = []  //记录
-    var now_action: Action = GameStart(parent: nil) //当前操作
-    var chooses:[Chose] = [] //所有选择
+    var discardedList = CardList()  //棄牌堆
+    var dealingList = CardList()  //處理區
+    var records: [Record] = []  //記錄
+    var now_action: Action = GameStart(parent: nil) //當前操作
     
-    //与ViewModel通信
+    //與ViewModel通信
     var onStateChange: (()->Void)?
     func notifyChange(){
         DispatchQueue.main.async{
@@ -89,15 +87,15 @@ class MainGame {
         }
     }
 
-    //设置体力
+    //設置體力
     func set_health(player: Int, num: Int) {
         players[player].health = num
     }
-    //设置体力上限
+    //設置體力上限
     func set_max_health(player: Int, num: Int) {
         players[player].max_health = num
     }
-    //改变牌位置
+    //改變牌位置
     func set_card_position(id: Int, from: CardList, to: CardList) {
         guard let card = from.search_for_card(id: id) else {
             log("failed to move card, id:\(id)", 3)
@@ -118,7 +116,7 @@ class MainGame {
     }
 }
 
-//玩家类
+//玩家類
 class Player {
     init(general: General, seat: Int) {
         self.general = general
@@ -130,17 +128,17 @@ class Player {
         self.seat = seat
     }
 
-    //武将
+    //武將
     var general: General
-    //区域
+    //區域
     var areas: [CardList] = [CardList(), CardList(), CardList()]
-    //体力值
+    //體力值
     var health: Int
     var max_health: Int
     var shield: Int
     //技能
     var skills: [SkillGroup]
-    //势力
+    //勢力
     var subject: Subject
     //座次
     var seat: Int
@@ -151,7 +149,7 @@ class Player {
 //卡牌列表
 class CardList {
     var cardlist: [Card] = []
-    //以id搜寻卡牌，返回卡牌和索引
+    //以id搜尋卡牌，返回卡牌和索引
     func search_for_card(id: Int) -> (Card, Int)? {
         for i in cardlist.indices {
             if cardlist[i].id == id {
@@ -164,7 +162,7 @@ class CardList {
     func add_card(card: Card) {
         cardlist.append(card)
     }
-    //移除卡牌，返回0表示成功，返回1表示无该牌
+    //移除卡牌，返回0表示成功，返回1表示無該牌
     func remove_card(id: Int) -> Int {
         if let index = search_for_card(id: id) {
             cardlist.remove(at: index.1)
@@ -174,7 +172,7 @@ class CardList {
     }
 }
 
-//游戏记录
+//遊戲記錄
 struct Record {
     var record: String
     var tabs: Int

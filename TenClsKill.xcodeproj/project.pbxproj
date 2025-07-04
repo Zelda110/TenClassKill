@@ -7,13 +7,212 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		345397C22DF9A67100AD6B35 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 345397C12DF9A67100AD6B35 /* README.md */; };
+		347195492E156AD90022A1C3 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 347195482E156AD90022A1C3 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		34387E5D2DF989FD00F2DB1B /* TenClsKill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TenClsKill.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		345397C12DF9A67100AD6B35 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		347195482E156AD90022A1C3 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		345397C32DF9B1EC00AD6B35 /* Exceptions for "develop resource" folder in "TenClsKill" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"game card_o/防具牌.psd",
+				"game card_o/基本牌.psd",
+				"game card_o/普通锦囊牌.psd",
+				"game card_o/武器牌.psd",
+				"game card_o/坐骑牌.psd",
+				"game card_o/aojiaoshucheng.psd",
+				"game card_o/babalai.psd",
+				"game card_o/call_8.psd",
+				"game card_o/chang_glasses.psd",
+				"game card_o/cold_like_autumn.psd",
+				"game card_o/cousen.psd",
+				"game card_o/dodge.psd",
+				"game card_o/doudiexu.psd",
+				"game card_o/duty.psd",
+				"game card_o/IMO_gold_medal.psd",
+				"game card_o/JDB.psd",
+				"game card_o/lung_cancer.psd",
+				"game card_o/MasterSword.psd",
+				"game card_o/muliuniuma.psd",
+				"game card_o/NCE.psd",
+				"game card_o/number_theory.psd",
+				"game card_o/peach.psd",
+				"game card_o/playing_cards_in_class.psd",
+				"game card_o/seat_sheet.psd",
+				"game card_o/senkou.psd",
+				"game card_o/stand_while_running.psd",
+				"game card_o/strike.psd",
+				"game card_o/warm_like_spring.psd",
+				"game card_o/wine.psd",
+				"game card_o/xinshounianlai.psd",
+				"game card_o/yellow_book.psd",
+				"game card_o/youth.psd",
+				"game card/基本牌.psd",
+				"game card/peach.psd",
+				"game card/wine.psd",
+				"general card/標準包/hzh.psd",
+				"general card/標準包/lcy.psd",
+				"general card/標準包/lqe.psd",
+				"general card/標準包/lqr.psd",
+				"general card/標準包/lxh.psd",
+				"general card/標準包/wcy.psd",
+				"general card/標準包/wjx.psd",
+				"general card/標準包/yxz.psd",
+				"general card/標準包/yyl.psd",
+				"general card/標準包/yzm.psd",
+				"general card/標準包/zwx.psd",
+				"general card/不再猶豫/hjh.psd",
+				"general card/不再猶豫/lqe.psd",
+				"general card/不再猶豫/lxh.psd",
+				"general card/不再猶豫/yxz.psd",
+				"general card/曠野之息/link.psd",
+				"general card/浪客劍心/hrks.psd",
+				"general card/浪客劍心/yst.psd",
+				"general card/模版/大旗.psd",
+				"general card/模版/化學.psd",
+				"general card/模版/生物.psd",
+				"general card/模版/數學.psd",
+				"general card/模版/物理.psd",
+				"general card/模版/信息.psd",
+				"general card/模版/星鉄.psd",
+				"general card/模版/英語.psd",
+				"general card/模版/語文.psd",
+				"general card/模版/原神.psd",
+				"general card/模版/zzz.psd",
+				"general card/神話再臨/Matilda.psd",
+				"general card/神話再臨/nl.psd",
+				"general card/師恩浩蕩/备课.psd",
+				"general card/師恩浩蕩/cxb.psd",
+				"general card/師恩浩蕩/wqj.psd",
+				"general card/物競天擇/lyz.psd",
+				"general card/物競天擇/wr.psd",
+				"general card/信手拈來/lac.psd",
+				"general card/信手拈來/lcy.psd",
+				"general card/信手拈來/ljc.psd",
+				"general card/信手拈來/yxx.psd",
+				"general card/信手拈來/yzm.psd",
+				"general card/星穹鐵道/dht.psd",
+				"general card/星穹鐵道/syq.psd",
+				"general card/星穹鐵道/xd.psd",
+				"general card/星穹鐵道/zgn.psd",
+				"general card/疑/dyz.psd",
+				"general card/疑/lcy.psd",
+				"general card/疑/lqe.psd",
+				"general card/疑/lyz.psd",
+				"general card/疑/oyj.psd",
+				"general card/疑/xjy.psd",
+				"general card/疑/yxz.psd",
+				"general card/疑/yyl.psd",
+				"general card/真是絕了/11.psd",
+				"general card/真是絕了/ks.psd",
+				"general card/真是絕了/xjy.psd",
+				"general card/真是絕了/ycl.psd",
+				"general card/真是絕了/yjy.psd",
+				"general card/真是絕了/yx.psd",
+				"general card/真是絕了/zl.psd",
+				"general card/sp/cyq.psd",
+				"general card/sp/lac.psd",
+				"general card/sp/lqe.psd",
+				"general card/sp/lyz.psd",
+				"general card/sp/oyj.psd",
+				"general card/sp/qxl.psd",
+				"general card/sp/yxz.psd",
+				"general card/sp/yyl.psd",
+				resource/bg.png,
+				resource/cards_o/aojiaoshucheng.png,
+				resource/cards_o/babalai.png,
+				resource/cards_o/call_8.png,
+				resource/cards_o/card_back.png,
+				resource/cards_o/chang_glasses.png,
+				resource/cards_o/cold_like_autumn.png,
+				resource/cards_o/cousen.png,
+				resource/cards_o/dodge.png,
+				resource/cards_o/doudiexu.png,
+				resource/cards_o/duty.png,
+				resource/cards_o/IMO_gold_medal.png,
+				resource/cards_o/JDB.png,
+				resource/cards_o/lung_cancer.png,
+				resource/cards_o/MasterSword.png,
+				resource/cards_o/muliuniuma.png,
+				resource/cards_o/NCE.png,
+				resource/cards_o/number_theory.png,
+				resource/cards_o/peach.png,
+				resource/cards_o/playing_cards_in_class.png,
+				resource/cards_o/seat_sheet.png,
+				resource/cards_o/senkou.png,
+				resource/cards_o/stand_while_running.png,
+				resource/cards_o/strike.png,
+				resource/cards_o/warm_like_spring.png,
+				resource/cards_o/wine.png,
+				resource/cards_o/xinshounianlai.png,
+				resource/cards_o/yellow_book.png,
+				resource/cards_o/youth.png,
+				resource/FangZhengZhunYuan.ttf,
+				resource/generals_o/5y.png,
+				resource/generals_o/cxb.png,
+				resource/generals_o/Euler.png,
+				resource/generals_o/Generals_back.png,
+				resource/generals_o/gyr_skill.png,
+				resource/generals_o/gyr.png,
+				resource/generals_o/hjh.png,
+				resource/generals_o/hzh.png,
+				resource/generals_o/jyr.png,
+				resource/generals_o/lcy.png,
+				resource/generals_o/lqe.png,
+				resource/generals_o/lqr.png,
+				resource/generals_o/lyz.png,
+				resource/generals_o/lzy.png,
+				resource/generals_o/math.png,
+				resource/generals_o/Matilda.png,
+				resource/generals_o/Miss.Trunchbull.png,
+				resource/generals_o/qxl.png,
+				resource/generals_o/sgs.png,
+				resource/generals_o/splqe.png,
+				resource/generals_o/splyz.png,
+				resource/generals_o/spoyj.png,
+				resource/generals_o/t_cw.png,
+				resource/generals_o/t_cxb.png,
+				resource/generals_o/t_fq.png,
+				resource/generals_o/t_gyr.png,
+				resource/generals_o/t_lyy.png,
+				resource/generals_o/t_tyx.png,
+				resource/generals_o/t_wqj.png,
+				resource/generals_o/t_xt.png,
+				resource/generals_o/teachers.png,
+				resource/generals_o/tyx.png,
+				resource/generals_o/wcy.png,
+				resource/generals_o/wjx.png,
+				resource/generals_o/wzx.png,
+				resource/generals_o/xcj.png,
+				resource/generals_o/xt.png,
+				resource/generals_o/yxz.png,
+				resource/generals_o/yyl.png,
+				resource/generals_o/zrz.png,
+				resource/generals_o/zwx.png,
+				"resource/generals/标准包/hzh.png",
+				"resource/generals/标准包/lcy.png",
+				"resource/generals/标准包/lqe.png",
+				"resource/generals/标准包/lqr.png",
+				"resource/generals/标准包/wcy.png",
+				"resource/generals/标准包/yxz.png",
+				"resource/generals/标准包/zwx.png",
+				"resource/generals/无出血尺寸.psd",
+				resource/lord.png,
+				resource/peach_icon.png,
+				resource/suit0.png,
+				resource/suit1.png,
+				resource/suit2.png,
+				resource/suit3.png,
+				resource/target.png,
+			);
+			target = 34387E5C2DF989FD00F2DB1B /* TenClsKill */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		34387E5F2DF989FD00F2DB1B /* TenClsKill */ = {
@@ -23,6 +222,9 @@
 		};
 		3453972C2DF9A5F100AD6B35 /* develop resource */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				345397C32DF9B1EC00AD6B35 /* Exceptions for "develop resource" folder in "TenClsKill" target */,
+			);
 			path = "develop resource";
 			sourceTree = "<group>";
 		};
@@ -42,6 +244,7 @@
 		34387E542DF989FD00F2DB1B = {
 			isa = PBXGroup;
 			children = (
+				347195482E156AD90022A1C3 /* Localizable.xcstrings */,
 				345397C12DF9A67100AD6B35 /* README.md */,
 				3453972C2DF9A5F100AD6B35 /* develop resource */,
 				34387E5F2DF989FD00F2DB1B /* TenClsKill */,
@@ -99,14 +302,17 @@
 				};
 			};
 			buildConfigurationList = 34387E582DF989FD00F2DB1B /* Build configuration list for PBXProject "TenClsKill" */;
-			developmentRegion = en;
+			developmentRegion = "zh-Hant";
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				"zh-Hant",
+				"zh-Hans",
 			);
 			mainGroup = 34387E542DF989FD00F2DB1B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 34387E5E2DF989FD00F2DB1B /* Products */;
 			projectDirPath = "";
@@ -122,7 +328,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				345397C22DF9A67100AD6B35 /* README.md in Resources */,
+				347195492E156AD90022A1C3 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +403,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -252,6 +459,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -268,6 +476,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -278,10 +487,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "zelda-110.TenClsKill";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -294,7 +503,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.0;
+				XROS_DEPLOYMENT_TARGET = 1.3;
 			};
 			name = Debug;
 		};
@@ -311,6 +520,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -321,10 +531,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "zelda-110.TenClsKill";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -337,7 +547,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.0;
+				XROS_DEPLOYMENT_TARGET = 1.3;
 			};
 			name = Release;
 		};

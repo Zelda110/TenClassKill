@@ -27,12 +27,12 @@ let Nunber: [String] = [
 
 enum Suit:String {
     case SPADES = "spades"//黑桃
-    case HEARTS = "hearts"//红桃
-    case DIAMONDS = "diamonds"//方块
+    case HEARTS = "hearts"//紅桃
+    case DIAMONDS = "diamonds"//方塊
     case CLUBS = "clubs"//梅花
 }
 
-//获取花色对应的颜色
+//獲取花色對應的顏色
 func getSuitColor(suit:Suit) -> Color{
     switch suit{
     case .CLUBS,.SPADES:
@@ -43,26 +43,26 @@ func getSuitColor(suit:Suit) -> Color{
 }
 
 enum Stage:String {
-    case PREPARATION = "准备阶段"
-    case JUDGEMENT = "判定阶段"
-    case DRAWING = "摸牌阶段"
-    case ACTION = "出牌阶段"
-    case DISCARD = "弃牌阶段"
-    case ENDING = "结束阶段"
+    case PREPARATION = "準備階段"
+    case JUDGEMENT = "判定階段"
+    case DRAWING = "摸牌階段"
+    case ACTION = "出牌階段"
+    case DISCARD = "棄牌階段"
+    case ENDING = "結束階段"
 }
 
 enum CardType:Int {
     case BASIC = 0//基本
-    case SCROLL//锦囊
-    case EQUIPMENT//装备
+    case SCROLL//錦囊
+    case EQUIPMENT//裝備
 }
 
 enum Area:Int{
-    case HANDCARD = 0//手牌区
-    case EQUIPMENT//装备区
-    case JUDGEMENT//判定区
+    case HANDCARD = 0//手牌區
+    case EQUIPMENT//裝備區
+    case JUDGEMENT//判定區
     case CARDDESK//牌堆
-    case DISCARDDESK//弃牌堆
+    case DISCARDDESK//棄牌堆
 }
 
 enum Subject:String{
@@ -76,49 +76,49 @@ enum Subject:String{
     case CHINESE = "chinese"
 }
 
-//获取学科对应的名称
+//獲取學科對應的名稱
 func getSubjectName(sub:Subject) -> String {
     switch sub {
     case .GOD:
         return "神"
     case .MATH:
-        return "数学"
+        return "數學"
     case .PHYSICS:
         return "物理"
     case .CHEMISTRY:
-        return "化学"
+        return "化學"
     case .BIOLOGY:
         return "生物"
     case .INFORMATICS:
         return "信息"
     case .ENGLISH:
-        return "英语"
+        return "英語"
     case .CHINESE:
-        return "语文"
+        return "語文"
     }
 }
 
 enum Role:Int{
     case MONARCH = 0//主公
     case MINISTER//忠臣
-    case REBEL//反贼
-    case TRAITORS//内奸
+    case REBEL//反賊
+    case TRAITORS//內奸
 }
 
 enum CardName:String{
-    case 杀 = "strike"
-    case 闪 = "dodge"
+    case 殺 = "strike"
+    case 閃 = "dodge"
     case 桃 = "peach"
     case 酒 = "wine"
-    case 加多宝 = "JDB"
+    case 加多寶 = "JDB"
     case 叫父陷阱 = "call_8"
-    case 秋风扫落叶 = "cold_like_autumn"
+    case 秋風掃落葉 = "cold_like_autumn"
     case DUTY = "DUTY"
     case 教室打牌 = "playing_cards_in_class"
     case 座位表 = "seat_sheet"
-    case 跑操站桩 = "stand_while_running"
-    case 春天般温暖 = "warm_like_spring"
-    case 信手拈来 = "xinshounianlai"
+    case 跑操站樁 = "stand_while_running"
+    case 春天般溫暖 = "warm_like_spring"
+    case 信手拈來 = "xinshounianlai"
 }
 
 enum GeneralCard:String{
@@ -135,13 +135,28 @@ enum Gender:String{
 }
 
 enum GeneralSet:String{
-    case 标准包 = "basic"
+    case 標準包 = "basic"
 }
 
-//限制次数恢复周期
-enum TimeReset:Int{
-    case round = 0
+//限制次數恢復週期
+enum TimeReset{
+    case round
     case turn
     case stage
     case game
+}
+
+//選擇種類
+enum ChooseType{
+    case common
+    case card
+}
+
+//技能標籤
+enum SkillTag{
+    case locked //鎖定技
+    case limited //限定技
+    case awake //覺醒技
+    case switching //轉換技
+    case mission //使命技
 }
