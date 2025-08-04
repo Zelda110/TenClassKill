@@ -14,15 +14,15 @@ func log(_ msg: String, _ importance: Int = 0) {
 //遊戲類
 class MainGame {
     init(player_num: Int) {
-        self.player_num = player_num
+        self.playerNum = player_num
         Action.mainGame = self
         players = [
             Player(general: WCY, seat: 0),
             Player(general: LQE, seat: 1),
             Player(general: LCY, seat: 2),
         ]
-        generate_cardlist()
-        giving_intital_card()
+        generateCardlist()
+        givingIntitalCard()
         log("Game Inited")
     }
 
@@ -31,9 +31,9 @@ class MainGame {
         notifyChange()
         Action.mainGame = self
         let gameStart = GameStart(parent: nil)  //開始遊戲操作
-        self.now_action = gameStart
-        Task{
-            while true{
+        self.nowAction = gameStart
+        Task {
+            while true {
                 Action.mainGame!.notifyChange()
                 try? await Task.sleep(nanoseconds: 10_000_000)
             }
@@ -42,14 +42,12 @@ class MainGame {
     }
 
     //生成牌堆
-    func generate_cardlist() {
+    func generateCardlist() {
         for _ in 0...13 {
             for i in 1...13 {
                 cardList.add_card(
-                    card: Card(
-                        suit: .HEARTS,
-                        number: i,
-                        name: .桃
+                    card: GameCard(
+                        info: [Card(suit: .DIAMONDS, number: i, cardName: PEACH)]
                     )
                 )
             }
@@ -57,7 +55,7 @@ class MainGame {
     }
 
     //發初始手牌
-    func giving_intital_card() {
+    func givingIntitalCard() {
         for _ in 0...3 {
             for player in players {
                 set_card_position(
@@ -69,20 +67,20 @@ class MainGame {
         }
     }
 
-    let player_num: Int  //人數
+    let playerNum: Int  //人數
     var players: [Player] = []
-    var round_num = 0  //輪次
-    var now_player = 0 //當前回合角色
+    var roundNum = 0  //輪次
+    var nowPlayer = 0  //當前回合角色
     var cardList = CardList()  //牌堆
     var discardedList = CardList()  //棄牌堆
     var dealingList = CardList()  //處理區
     var records: [Record] = []  //記錄
-    var now_action: Action = GameStart(parent: nil) //當前操作
-    
+    var nowAction: Action = GameStart(parent: nil)  //當前操作
+
     //與ViewModel通信
-    var onStateChange: (()->Void)?
-    func notifyChange(){
-        DispatchQueue.main.async{
+    var onStateChange: (() -> Void)?
+    func notifyChange() {
+        DispatchQueue.main.async {
             self.onStateChange?()
         }
     }
@@ -123,7 +121,7 @@ class Player {
         self.health = general.health
         self.max_health = general.max_health
         self.shield = general.shield
-        self.skills = general.skills
+        self.skills = SystemSkills + general.skills
         self.subject = general.subject
         self.seat = seat
     }
@@ -144,13 +142,32 @@ class Player {
     var seat: Int
     //是否存活
     var alive = true
+    
+    func askPlayerSkill(parent: Action) async {
+        for skillGroup in self.skills {
+            for skill in skillGroup.skills {
+                if skill
+                    .canUse(occasion: parent, player: seat)
+                {
+                    //鎖定技直接發動
+                    if skill.locked {
+                        await UseSkill(
+                            parent: parent,
+                            skill: skill,
+                            player: seat
+                        ).exe()
+                    }
+                }
+            }
+        }
+    }
 }
 
 //卡牌列表
 class CardList {
-    var cardlist: [Card] = []
+    var cardlist: [GameCard] = []
     //以id搜尋卡牌，返回卡牌和索引
-    func search_for_card(id: Int) -> (Card, Int)? {
+    func search_for_card(id: Int) -> (GameCard, Int)? {
         for i in cardlist.indices {
             if cardlist[i].id == id {
                 return (cardlist[i], i)
@@ -159,7 +176,7 @@ class CardList {
         return nil
     }
     //添加卡牌
-    func add_card(card: Card) {
+    func add_card(card: GameCard) {
         cardlist.append(card)
     }
     //移除卡牌，返回0表示成功，返回1表示無該牌

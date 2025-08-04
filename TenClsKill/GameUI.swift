@@ -17,7 +17,7 @@ import SwiftUI
 let card_scale = 0.10
 let general_card_width = 1094 * card_scale
 let general_card_height = 1534 * card_scale + 180 * card_scale
-let game_card_width = 1024 * card_scale
+let game_card_width =  1024 * card_scale
 let game_card_height = 1438 * card_scale
 
 //主遊戲的視圖模型
@@ -33,19 +33,19 @@ class GameViewModel: ObservableObject {
     @Published var dealingList = CardList()  //處理區
     @Published var records: [Record] = []  //記錄
     @Published var now_action: Action = GameStart(parent: nil)  //當前操作
-    @Published var handcards: [[Card]] = []  //手牌
+    @Published var handcards: [[GameCard]] = []  //手牌
 
     var game = MainGame(player_num: 3)
 
     init() {
         self.players = self.game.players
-        self.round_num = self.game.round_num
-        self.now_player = self.game.now_player
+        self.round_num = self.game.roundNum
+        self.now_player = self.game.nowPlayer
         self.cardList = self.game.cardList
         self.discardedList = self.game.discardedList
         self.dealingList = self.game.dealingList
         self.records = self.game.records
-        self.now_action = self.game.now_action
+        self.now_action = self.game.nowAction
         for player in players {
             self.handcards.append(player.areas[Area.HANDCARD.rawValue].cardlist)
         }
@@ -53,13 +53,13 @@ class GameViewModel: ObservableObject {
         game.onStateChange = { [weak self] in
             guard let self else { return }
             self.players = self.game.players
-            self.round_num = self.game.round_num
-            self.now_player = self.game.now_player
+            self.round_num = self.game.roundNum
+            self.now_player = self.game.nowPlayer
             self.cardList = self.game.cardList
             self.discardedList = self.game.discardedList
             self.dealingList = self.game.dealingList
             self.records = self.game.records
-            self.now_action = self.game.now_action
+            self.now_action = self.game.nowAction
             self.handcards = []
             for player in self.game.players {
                 self.handcards
@@ -136,7 +136,7 @@ struct InGameUI: View {
                         withAnimation {
                             view_record = !view_record
                         }
-                    }
+                    }.keyboardShortcut("r", modifiers: [])
                     if DEBUG_MODE {
                         Picker("操控玩家", selection: $game.operating_player) {
                             ForEach(0..<game.player_num, id: \.self) { i in
@@ -319,12 +319,12 @@ func getGeneralUiPosition(game: GameViewModel, geo: GeometryProxy, index: Int)
 
 //遊戲牌UI
 struct GameCardUI: View {
-    var card: Card
+    var card: GameCard
     var back_up = false  //是否背面朝上
     var body: some View {
         ZStack {
             //圖片
-            Image(back_up ? "card_bg" : "\(card.name.rawValue)")
+            Image(back_up ? "card_bg" : "\(card.cardName.image)")
                 .resizable()
             //花色點數
             if !back_up {
@@ -341,11 +341,6 @@ struct GameCardUI: View {
                     Spacer()
                 }.padding(.horizontal, 8)
                     .padding(.vertical, 5)
-                Rectangle()
-                    .foregroundColor(.black)
-                    .opacity(
-                        card.can_use ? 0.0 : 0.3
-                    )
             }
         }
         .frame(
@@ -359,7 +354,7 @@ struct GameCardUI: View {
 
 //牌列表UI
 struct CardListUI: View {
-    var cardlist: [Card]
+    var cardlist: [GameCard]
     var back_up = false  //是否背面朝上
     var width: Double
     var scroolable: Bool = true  //是否可以滾動

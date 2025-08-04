@@ -18,25 +18,33 @@ class Action {
     }
 
     //自動操作
-    func start() async{
+    func start() async {
         if use_tab {
             Action.tabs += 1
         }
-        Action.mainGame!.now_action = self
-        await AskSkill(parent: self).exe()
-        try? await Task.sleep(nanoseconds: 10_000_000)
+        try? await Task.sleep(nanoseconds: 10_000_000_0)
     }
     func end() async {
         if use_tab {
             Action.tabs -= 1
         }
-        try? await Task.sleep(nanoseconds: 10_000_000)
+        try? await Task.sleep(nanoseconds: 10_000_000_0)
     }
 
     static var tabs = 0  //記錄層級
     static var mainGame: MainGame? = nil  //主遊戲
     var parent: Action?  //父行為
     var use_tab: Bool  //是否使用縮進
+    //技能輪詢
+    func askSkill() async {
+        for i in 0...(Action.mainGame!.playerNum - 1) {
+            let player =
+                (i + Action.mainGame!.nowPlayer) % Action.mainGame!.playerNum
+            if isAlive(player: player) {
+                await getPlayer(player).askPlayerSkill(parent: self)
+            }
+        }
+    }
     //添加記錄
     func record(_ record: String) {
         Action.mainGame!.records
@@ -60,9 +68,10 @@ class GameStart: Action {
     override func exe() async {
         await start()
         record("遊戲開始")
+        await askSkill()
         while true {
-            await RunRound(parent: self, num: Action.mainGame!.round_num).exe()
-            Action.mainGame!.round_num += 1
+            await RunRound(parent: self, num: Action.mainGame!.roundNum).exe()
+            Action.mainGame!.roundNum += 1
         }
         await end()
     }
@@ -72,12 +81,12 @@ class GameStart: Action {
 class RunRound: Action {
     init(parent: Action, num: Int) {
         self.num = num
-        super.init(parent: parent,usetab: false)
+        super.init(parent: parent, usetab: false)
     }
     override func exe() async {
         await start()
         await RoundStart(parent: self).exe()
-        for i in 0..<Action.mainGame!.player_num {
+        for i in 0..<Action.mainGame!.playerNum {
             if Action.mainGame!.players[i].alive {
                 await RunTurn(parent: self, player: i).exe()
             }
@@ -96,6 +105,7 @@ class RoundStart: Action {
     override func exe() async {
         await start()
         record("第\((parent as! RunRound).num+1)輪開始")
+        await askSkill()
         await end()
     }
 }
@@ -108,10 +118,11 @@ class RoundEnd: Action {
     override func exe() async {
         await start()
         record("第\((parent as! RunRound).num+1)輪結束")
+        await askSkill()
         //恢復技能使用次數
         for player in Action.mainGame!.players {
             for skillGroup in player.skills {
-                for skill in skillGroup.skills {
+                for var skill in skillGroup.skills {
                     if skill.timeReset == .round {
                         skill.time = 0
                     }
@@ -132,6 +143,7 @@ class StageStart: Action {
     override func exe() async {
         await start()
         record("\(getGeneralName(player: player))的\(stage.rawValue)開始")
+        await askSkill()
         await end()
     }
     var stage: Stage
@@ -148,10 +160,11 @@ class StageEnd: Action {
     override func exe() async {
         await start()
         record("\(getGeneralName(player: player))的\(stage.rawValue)結束")
+        await askSkill()
         //恢復技能使用次數
         for player in Action.mainGame!.players {
             for skillGroup in player.skills {
-                for skill in skillGroup.skills {
+                for var skill in skillGroup.skills {
                     if skill.timeReset == .stage {
                         skill.time = 0
                     }
@@ -173,6 +186,7 @@ class TurnStart: Action {
     override func exe() async {
         await start()
         record("\(getGeneralName(player: player))的回合開始")
+        await askSkill()
         await end()
     }
     var player: Int
@@ -187,10 +201,11 @@ class TurnEnd: Action {
     override func exe() async {
         await start()
         record("\(getGeneralName(player: player))的回合結束")
+        await askSkill()
         //恢復技能使用次數
         for player in Action.mainGame!.players {
             for skillGroup in player.skills {
-                for skill in skillGroup.skills {
+                for var skill in skillGroup.skills {
                     if skill.timeReset == .turn {
                         skill.time = 0
                     }
@@ -232,18 +247,19 @@ class RunStage: Action {
     init(parent: Action, player: Int, stage: Stage) {
         self.stage = stage
         self.player = player
-        super.init(parent: parent,usetab: false)
+        super.init(parent: parent, usetab: false)
     }
     override func exe() async {
         await start()
         await StageStart(parent: self, player: player, stage: stage).exe()
+        await askSkill()
         switch stage {
         case .PREPARATION:
             break
         case .JUDGEMENT:
             break
         case .DRAWING:
-            await DrawCard(parent: self, player: player, num: drawing_num).exe()
+            break
         case .ACTION:
             //            while !should_end {
             await ActionPoint(parent: self, player: player).exe()
@@ -266,11 +282,11 @@ class RunStage: Action {
 class RunTurn: Action {
     init(parent: Action, player: Int) {
         self.player = player
-        super.init(parent: parent,usetab: false)
+        super.init(parent: parent, usetab: false)
     }
     override func exe() async {
         await start()
-        Action.mainGame!.now_player = player
+        Action.mainGame!.nowPlayer = player
         await TurnStart(parent: self, player: player).exe()
         await RunStage(parent: self, player: player, stage: .PREPARATION).exe()
         await RunStage(parent: self, player: player, stage: .JUDGEMENT).exe()
@@ -296,6 +312,7 @@ class SetHealth: Action {
         await start()
         record("\(getGeneralName(player: player))的體力值由\(old)變為\(num)")
         Action.mainGame!.players[player].health = num
+        await askSkill()
         await end()
     }
     var player: Int
@@ -321,6 +338,7 @@ class SetMaxHealth: Action {
                 num: getMaxHealth(player: player)
             ).exe()
         }
+        await askSkill()
         await end()
     }
     var player: Int
@@ -348,6 +366,7 @@ class Recover: Action {
             num: getHealth(player: player) + num
         )
         .exe()
+        await askSkill()
         await end()
     }
     var player: Int
@@ -370,6 +389,7 @@ class LoseHealth: Action {
             num: getHealth(player: player) - num
         )
         .exe()
+        await askSkill()
         await end()
     }
     var player: Int
@@ -392,6 +412,7 @@ class AddMaxHealth: Action {
             num: getMaxHealth(player: player) + num
         )
         .exe()
+        await askSkill()
         await end()
     }
     var player: Int
@@ -414,6 +435,7 @@ class ReduceMaxHealth: Action {
             num: getMaxHealth(player: player) - num
         )
         .exe()
+        await askSkill()
         await end()
     }
     var player: Int
@@ -428,34 +450,26 @@ class ActionPoint: Action {
     }
     override func exe() async {
         await start()
-        
+        await askSkill()
         await end()
     }
     var player: Int
 }
 
-//技能輪詢
-class AskSkill: Action {
-    init(parent: Action) {
-        super.init(parent: parent, usetab: false)
-    }
-    override func exe() async {
-
-    }
-}
-
 //輔助函數
+
+func getPlayer(_ seat: Int) -> Player {
+    return Action.mainGame!.players[seat]
+}
 
 //獲取體力值
 func getHealth(player: Int) -> Int {
-    let player = Action.mainGame!.players[player]
-    return player.health
+    return getPlayer(player).health
 }
 
 //獲取體力上限
 func getMaxHealth(player: Int) -> Int {
-    let player = Action.mainGame!.players[player]
-    return player.max_health
+    return getPlayer(player).max_health
 }
 
 //獲取已損失體力值
@@ -474,11 +488,13 @@ func isHurted(player: Int) -> Bool {
 
 //獲取是否存活
 func isAlive(player: Int) -> Bool {
-    return Action.mainGame!.players[player].alive
+    return getPlayer(player).alive
+}
+func isAlive(player: Player) -> Bool {
+    return player.alive
 }
 
 //獲取武將名稱
 func getGeneralName(player: Int) -> String {
-    let player = Action.mainGame!.players[player]
-    return player.general.name
+    return getPlayer(player).general.name
 }

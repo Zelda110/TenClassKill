@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		347195492E156AD90022A1C3 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 347195482E156AD90022A1C3 /* Localizable.xcstrings */; };
+		34B8E6B02E18190F00ECE552 /* TCK.icon in Resources */ = {isa = PBXBuildFile; fileRef = 34B8E6AF2E18190F00ECE552 /* TCK.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		34387E5D2DF989FD00F2DB1B /* TenClsKill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TenClsKill.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		345397C12DF9A67100AD6B35 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		347195482E156AD90022A1C3 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		34B8E6AF2E18190F00ECE552 /* TCK.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = TCK.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -244,6 +246,7 @@
 		34387E542DF989FD00F2DB1B = {
 			isa = PBXGroup;
 			children = (
+				34B8E6AF2E18190F00ECE552 /* TCK.icon */,
 				347195482E156AD90022A1C3 /* Localizable.xcstrings */,
 				345397C12DF9A67100AD6B35 /* README.md */,
 				3453972C2DF9A5F100AD6B35 /* develop resource */,
@@ -328,6 +331,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34B8E6B02E18190F00ECE552 /* TCK.icon in Resources */,
 				347195492E156AD90022A1C3 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,8 +470,9 @@
 		34387E692DF989FD00F2DB1B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = TCK.icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9C6N74DF64;
@@ -510,8 +515,9 @@
 		34387E6A2DF989FD00F2DB1B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = TCK.icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9C6N74DF64;

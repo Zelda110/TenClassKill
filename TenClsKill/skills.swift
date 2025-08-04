@@ -48,7 +48,7 @@ class UseSkill: Action {
     override func exe() async {
         await start()
         record("\(getGeneralName(player: player))發動了技能\(skill.name)")
-        skill.exe(occasion: self.parent!, player: player)
+        await skill.exe(occasion: self, player: player)
         await end()
     }
     var skill: Skill
@@ -56,37 +56,76 @@ class UseSkill: Action {
 }
 
 //技能
-class Skill {
-    init(name: String, timeReset: TimeReset = .game) {
-        self.name = name
-        self.timeReset = timeReset
-    }
-    let name: String  //技能名
-    func canUse(occasion: Action, player: Int) -> Bool {
-        return true
-    }  //是否可以使用
-    func exe(occasion: Action, player: Int) {
-        return
-    }  //執行
-    var time: Int = 0  //使用次數
-    let timeReset: TimeReset  //使用次數恢復時機
+protocol Skill {
+    var name: String { get }  //技能名
+    func canUse(occasion: Action, player: Int) -> Bool  //是否可以使用
+    func exe(occasion: Action, player: Int) async  //執行
+    var time: Int { get set }  //使用次數
+    var timeReset: TimeReset { get }  //使用次數恢復時機
+    var locked: Bool { get }  //是否必須發動
 }
 
 //技能組
-class SkillGroup {
-    init(
-        name: String,
-        description: String,
-        tag: [SkillTag] = [],
-        skills: [Skill]
-    ) {
-        self.name = name
-        self.description = description
-        self.tag = tag
-        self.skills = skills
+protocol SkillGroup {
+    var name: String { get }  //技能名
+    var description: String { get }  //技能描述
+    var tag: [SkillTag] { get }  //技能標籤
+    var skills: [Skill] { get set }  //技能
+    var type: SkillType { get }  //技能種類
+}
+
+//遊戲機制
+let SystemSkills = [DrawCardSkill()]
+
+class DrawCardSkill0: Skill {
+    let name: String = "摸牌"
+    func canUse(occasion: Action, player: Int) -> Bool {
+        if let oca = occasion as? RunStage {
+            if oca.stage == .DRAWING && oca.player == player {
+                return true
+            }
+        }
+        return false
     }
-    let name: String  //技能名
-    let description: String  //技能描述
-    let tag: [SkillTag]  //技能標籤
-    let skills: [Skill]  //技能
+    func exe(occasion: Action, player: Int) async {
+        await DrawCard(parent: occasion, player: player, num: 2).exe()
+    }
+    var time: Int = 0
+    let timeReset: TimeReset = .stage
+    let locked: Bool = true
+}
+
+class DrawCardSkill: SkillGroup {
+    let name: String = "摸牌"
+    let description: String = "鎖定技，摸牌階段，你摸兩張牌。"
+    let tag: [SkillTag] = [.locked]
+    var skills: [Skill] = [DrawCardSkill0()]
+    let type: SkillType = .system
+}
+
+//武將技能
+class 回血0: Skill{
+    let name: String = "回血"
+    func canUse(occasion: Action, player: Int) -> Bool {
+        if let oca = occasion as? ActionPoint {
+            if oca.player == player && isHurted(player: player){
+                return true
+            }
+        }
+        return false
+    }
+    func exe(occasion: Action, player: Int) async {
+        await Recover(parent: occasion, player: player, num: 1).exe()
+    }
+    var time: Int = 0
+    let timeReset: TimeReset = .round
+    let locked: Bool = false
+}
+
+class 回血: SkillGroup{
+    let name: String = "回血"
+    let description: String = "鎖定技，出牌階段，若你已受傷，你回復1點體力。"
+    let tag: [SkillTag] = [.locked]
+    var skills: [Skill] = [回血0()]
+    let type: SkillType = .common
 }

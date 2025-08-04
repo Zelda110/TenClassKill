@@ -26,6 +26,7 @@ let Nunber: [String] = [
 ]
 
 enum Suit:String {
+    case NIL = "noSuit" //無花色
     case SPADES = "spades"//黑桃
     case HEARTS = "hearts"//紅桃
     case DIAMONDS = "diamonds"//方塊
@@ -39,6 +40,8 @@ func getSuitColor(suit:Suit) -> Color{
         return Color.black
     case .DIAMONDS,.HEARTS:
         return Color.red
+    case .NIL:
+        return Color.white
     }
 }
 
@@ -105,22 +108,6 @@ enum Role:Int{
     case TRAITORS//內奸
 }
 
-enum CardName:String{
-    case 殺 = "strike"
-    case 閃 = "dodge"
-    case 桃 = "peach"
-    case 酒 = "wine"
-    case 加多寶 = "JDB"
-    case 叫父陷阱 = "call_8"
-    case 秋風掃落葉 = "cold_like_autumn"
-    case DUTY = "DUTY"
-    case 教室打牌 = "playing_cards_in_class"
-    case 座位表 = "seat_sheet"
-    case 跑操站樁 = "stand_while_running"
-    case 春天般溫暖 = "warm_like_spring"
-    case 信手拈來 = "xinshounianlai"
-}
-
 enum GeneralCard:String{
     case yyl = "yyl"
     case lqe = "lqe"
@@ -159,4 +146,11 @@ enum SkillTag{
     case awake //覺醒技
     case switching //轉換技
     case mission //使命技
+}
+
+//技能種類
+enum SkillType{
+    case common
+    case system  //用於遊戲機制的技能
+    case card  //用於卡牌的技能
 }

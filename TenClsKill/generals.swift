@@ -59,7 +59,7 @@ let WCY = General(
     name: "王成悅",
     health: 2,
     max_health: 3,
-    skills: [],
+    skills: [回血()],
     card: .wcy,
     set: .標準包,
     subject: .BIOLOGY,
