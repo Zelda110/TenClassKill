@@ -154,3 +154,10 @@ enum SkillType{
     case system  //用於遊戲機制的技能
     case card  //用於卡牌的技能
 }
+
+//選擇類型
+enum OptionType{
+    case common
+    case card
+    case skill
+}

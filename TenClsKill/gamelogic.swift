@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Playgrounds
 
 func log(_ msg: String, _ importance: Int = 0) {
     print(msg)
@@ -35,6 +36,7 @@ class MainGame {
     var dealingList = CardList()  //處理區
     var records: [Record] = []  //記錄
     var nowAction: Action = GameStart(parent: nil)  //當前操作
+    var nowChoice: Choice? = nil  //當前選擇
 
     //開始遊戲
     func start() async {
@@ -148,17 +150,15 @@ class Player {
     func askPlayerSkill(parent: Action) async {
         var used: [Int] = []
         while true {
-            var haveSkill = false
-            for skillGroup in self.skills {
-                for skill in skillGroup.skills {
-                    if skill
-                        .canUse(occasion: parent, player: seat)
-                        && !used
-                            .contains(skill.id)
-                    {
-                        haveSkill = true
-                        // 鎖定技自動發動
-                        if skill.locked {
+            // 鎖定技自動發動
+            while true {
+                var haveSkill = false
+                for skillGroup in self.skills {
+                    for skill in skillGroup.skills {
+                        if !used.contains(skill.id) && skill.locked
+                            && skill.canUse(occasion: parent, player: seat)
+                        {
+                            haveSkill = true
                             used.append(skill.id)
                             await UseSkill(
                                 parent: parent,
@@ -168,28 +168,65 @@ class Player {
                             break
                         }
                     }
-                }
-                if haveSkill {
-                    break
-                }
-                for skill in skillGroup.skills {
-                    var skillList: [Skill] = []
-                    if skill
-                        .canUse(occasion: parent, player: seat)
-                        && !used
-                            .contains(skill.id)
-                    {
-                        haveSkill = true
-                        // 鎖定技自動發動
-                        skillList.append(skill)
+                    if haveSkill {
+                        break
                     }
                 }
                 if !haveSkill {
-                    return
+                    break
                 }
-                await withCheckedContinuation { continuation in
-                    continuation.resume()
+            }
+            //其他技能自選發動
+            var skillList: [Skill] = []
+            for skillGroup in self.skills {
+                for skill in skillGroup.skills {
+                    if !used.contains(skill.id) && !skill.locked
+                        && skill.canUse(occasion: parent, player: seat)
+                    {
+                        skillList.append(skill)
+                    }
                 }
+            }
+            if !skillList.isEmpty {
+                var optionList: [Option] = []
+                for skill in skillList {
+                    optionList.append(Option(skill: skill))
+                }
+                optionList.append(Option(name: "取消", value: 0))
+                let ans:(
+                    OptionType, Int
+                ) = await withCheckedContinuation { continuation in
+                    Action.mainGame!.nowChoice = Choice(
+                        continuation:continuation,
+                        options: optionList,
+                        player: seat
+                    )
+                }
+                if ans.0 == .skill {
+                    used.append(ans.1)
+                    for skillGroup in self.skills {
+                        for skill in skillGroup.skills {
+                            if skill.id == ans.1 {
+                                await UseSkill(
+                                    parent: parent,
+                                    skill: skill,
+                                    player: seat
+                                ).exe()
+                            }
+                        }
+                    }
+                    continue
+                }
+                else if ans.0 == .card {
+                    //todo
+                    continue
+                }
+                else{
+                    break
+                }
+            }
+            else{
+                break
             }
         }
     }

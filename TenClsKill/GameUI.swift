@@ -34,6 +34,7 @@ class GameViewModel: ObservableObject {
     @Published var records: [Record] = []  //記錄
     @Published var now_action: Action = GameStart(parent: nil)  //當前操作
     @Published var handcards: [[GameCard]] = []  //手牌
+    @Published var nowChoice: Choice? = nil  //當前選擇
 
     var game = MainGame(player_num: 3)
 
@@ -46,10 +47,11 @@ class GameViewModel: ObservableObject {
         self.dealingList = self.game.dealingList
         self.records = self.game.records
         self.now_action = self.game.nowAction
+        self.nowChoice = self.game.nowChoice
         for player in players {
             self.handcards.append(player.areas[Area.HANDCARD.rawValue].cardlist)
         }
-
+        
         game.onStateChange = { [weak self] in
             guard let self else { return }
             self.players = self.game.players
@@ -60,10 +62,9 @@ class GameViewModel: ObservableObject {
             self.dealingList = self.game.dealingList
             self.records = self.game.records
             self.now_action = self.game.nowAction
-            self.handcards = []
-            for player in self.game.players {
-                self.handcards
-                    .append(player.areas[Area.HANDCARD.rawValue].cardlist)
+            self.nowChoice = self.game.nowChoice
+            for player in players {
+                self.handcards.append(player.areas[Area.HANDCARD.rawValue].cardlist)
             }
         }
         game.notifyChange()
@@ -88,6 +89,8 @@ struct InGameUI: View {
             ZStack {
                 VStack {
                     Spacer()
+                    //選擇介面
+                    ChoiceUI(game: game)
                     //手牌
                     HStack {
                         CardListUI(
@@ -103,7 +106,6 @@ struct InGameUI: View {
                     ForEach(game.players, id: \.seat) { i in
                         GeneralCardUI(
                             player: i,
-                            operating_player: game.operating_player,
                             game: game
                         )
                     }
@@ -179,11 +181,10 @@ func getVerticalName(name: String) -> String {
 //武將牌UI
 struct GeneralCardUI: View {
     var player: Player
-    var operating_player: Int
     @ObservedObject var game: GameViewModel
     var body: some View {
         let card_id = player.general.get_image()
-        let relative_num = player.seat - operating_player
+        let relative_num = player.seat - game.operating_player
         let name = getVerticalName(name: player.general.name)
         GeometryReader { geo in
             VStack {
@@ -283,7 +284,7 @@ struct GeneralCardUI: View {
                     index: relative_num
                 )
             )
-            .animation(.default, value: operating_player)
+            .animation(.default, value: game.operating_player)
         }
     }
 }
@@ -407,6 +408,35 @@ struct RecordUI: View {
         .background(.ultraThinMaterial)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animation(.default, value: game.records.count)
+    }
+}
+
+//選項介面
+struct OptionUI: View {
+    var option: Option
+    @ObservedObject var game: GameViewModel
+    var body: some View {
+        Button(option.name){
+            game.nowChoice!.choose(choosedOption: option)
+        }
+    }
+}
+
+//選擇欄介面
+struct ChoiceUI: View {
+    @ObservedObject var game: GameViewModel
+    var body: some View {
+        HStack{
+            if let choice = game.nowChoice {
+                if choice.player == game.operating_player {
+                    ForEach(choice.options,id: \.name.hashValue){ option in
+                        if option.type != .card{
+                            OptionUI(option: option, game: game)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

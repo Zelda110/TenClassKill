@@ -260,9 +260,9 @@ class RunStage: Action {
         case .DRAWING:
             await askSkill()
         case .ACTION:
-//                        while !should_end {
+            //                        while !should_end {
             await ActionPoint(parent: self, player: player).exe()
-//                    }
+        //                    }
         case .DISCARD:
             await askSkill()
         case .ENDING:
@@ -453,6 +453,51 @@ class ActionPoint: Action {
         await end()
     }
     var player: Int
+}
+
+//用戶選擇
+class Option {
+    init(name: String, value: Int) {
+        self.type = .common
+        self.name = name
+        self.value = value
+    }
+    init(card: GameCard) {
+        self.type = .card
+        self.name = ""
+        self.value = card.id
+    }
+    init(skill: Skill) {
+        self.type = .skill
+        self.name = skill.name
+        self.value = skill.id
+    }
+    var type: OptionType
+    var name: String
+    var value: Int
+    var hash: Int {
+        self.name.hashValue ^ self.value.hashValue
+    }
+}
+
+class Choice {
+    init(
+        continuation: CheckedContinuation<(OptionType, Int), Never>,
+        options: [Option],
+        player: Int
+    ) {
+        self.continuation = continuation
+        self.options = options
+        self.player = player
+    }
+    var continuation: CheckedContinuation<(OptionType, Int), Never>
+    var options: [Option]
+    var player: Int
+
+    func choose(choosedOption: Option) {
+        continuation.resume(returning: (choosedOption.type, choosedOption.value))
+        Action.mainGame!.nowChoice = nil
+    }
 }
 
 //輔助函數
