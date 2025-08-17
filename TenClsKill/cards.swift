@@ -109,8 +109,13 @@ class GameCard {
 
 //遊戲牌技能
 class PeachActionPoint: Skill {
-    let name: String = "桃"
-    func canUse(occasion: Action, player: Int) -> Bool {
+    override init() {
+        super.init()
+        self.name = "桃"
+        self.timeReset = .game
+        self.locked = false
+    }
+    override func canUse(occasion: Action, player: Int) -> Bool {
         if let oca = occasion as? RunStage {
             if oca.stage == .DRAWING && oca.player == player {
                 return true
@@ -118,12 +123,9 @@ class PeachActionPoint: Skill {
         }
         return false
     }
-    func exe(occasion: Action, player: Int) async {
+    override func exe(occasion: Action, player: Int) async {
         await DrawCard(parent: occasion, player: player, num: 2).exe()
     }
-    var time: Int = 0
-    let timeReset: TimeReset = .game
-    let locked: Bool = false
 }
 
 class PeachSkill: SkillGroup {

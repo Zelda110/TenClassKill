@@ -26,6 +26,16 @@ class MainGame {
         log("Game Inited")
     }
 
+    let playerNum: Int  //人數
+    var players: [Player] = []
+    var roundNum = 0  //輪次
+    var nowPlayer = 0  //當前回合角色
+    var cardList = CardList()  //牌堆
+    var discardedList = CardList()  //棄牌堆
+    var dealingList = CardList()  //處理區
+    var records: [Record] = []  //記錄
+    var nowAction: Action = GameStart(parent: nil)  //當前操作
+
     //開始遊戲
     func start() async {
         notifyChange()
@@ -47,7 +57,9 @@ class MainGame {
             for i in 1...13 {
                 cardList.add_card(
                     card: GameCard(
-                        info: [Card(suit: .DIAMONDS, number: i, cardName: PEACH)]
+                        info: [
+                            Card(suit: .DIAMONDS, number: i, cardName: PEACH)
+                        ]
                     )
                 )
             }
@@ -66,16 +78,6 @@ class MainGame {
             }
         }
     }
-
-    let playerNum: Int  //人數
-    var players: [Player] = []
-    var roundNum = 0  //輪次
-    var nowPlayer = 0  //當前回合角色
-    var cardList = CardList()  //牌堆
-    var discardedList = CardList()  //棄牌堆
-    var dealingList = CardList()  //處理區
-    var records: [Record] = []  //記錄
-    var nowAction: Action = GameStart(parent: nil)  //當前操作
 
     //與ViewModel通信
     var onStateChange: (() -> Void)?
@@ -142,21 +144,51 @@ class Player {
     var seat: Int
     //是否存活
     var alive = true
-    
+
     func askPlayerSkill(parent: Action) async {
-        for skillGroup in self.skills {
-            for skill in skillGroup.skills {
-                if skill
-                    .canUse(occasion: parent, player: seat)
-                {
-                    //鎖定技直接發動
-                    if skill.locked {
-                        await UseSkill(
-                            parent: parent,
-                            skill: skill,
-                            player: seat
-                        ).exe()
+        var used: [Int] = []
+        while true {
+            var haveSkill = false
+            for skillGroup in self.skills {
+                for skill in skillGroup.skills {
+                    if skill
+                        .canUse(occasion: parent, player: seat)
+                        && !used
+                            .contains(skill.id)
+                    {
+                        haveSkill = true
+                        // 鎖定技自動發動
+                        if skill.locked {
+                            used.append(skill.id)
+                            await UseSkill(
+                                parent: parent,
+                                skill: skill,
+                                player: self.seat
+                            ).exe()
+                            break
+                        }
                     }
+                }
+                if haveSkill {
+                    break
+                }
+                for skill in skillGroup.skills {
+                    var skillList: [Skill] = []
+                    if skill
+                        .canUse(occasion: parent, player: seat)
+                        && !used
+                            .contains(skill.id)
+                    {
+                        haveSkill = true
+                        // 鎖定技自動發動
+                        skillList.append(skill)
+                    }
+                }
+                if !haveSkill {
+                    return
+                }
+                await withCheckedContinuation { continuation in
+                    continuation.resume()
                 }
             }
         }

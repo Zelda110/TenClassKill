@@ -122,7 +122,7 @@ class RoundEnd: Action {
         //恢復技能使用次數
         for player in Action.mainGame!.players {
             for skillGroup in player.skills {
-                for var skill in skillGroup.skills {
+                for skill in skillGroup.skills {
                     if skill.timeReset == .round {
                         skill.time = 0
                     }
@@ -164,7 +164,7 @@ class StageEnd: Action {
         //恢復技能使用次數
         for player in Action.mainGame!.players {
             for skillGroup in player.skills {
-                for var skill in skillGroup.skills {
+                for skill in skillGroup.skills {
                     if skill.timeReset == .stage {
                         skill.time = 0
                     }
@@ -205,7 +205,7 @@ class TurnEnd: Action {
         //恢復技能使用次數
         for player in Action.mainGame!.players {
             for skillGroup in player.skills {
-                for var skill in skillGroup.skills {
+                for skill in skillGroup.skills {
                     if skill.timeReset == .turn {
                         skill.time = 0
                     }
@@ -252,22 +252,21 @@ class RunStage: Action {
     override func exe() async {
         await start()
         await StageStart(parent: self, player: player, stage: stage).exe()
-        await askSkill()
         switch stage {
         case .PREPARATION:
-            break
+            await askSkill()
         case .JUDGEMENT:
-            break
+            await askSkill()
         case .DRAWING:
-            break
+            await askSkill()
         case .ACTION:
-            //            while !should_end {
+//                        while !should_end {
             await ActionPoint(parent: self, player: player).exe()
-        //            }
+//                    }
         case .DISCARD:
-            break
+            await askSkill()
         case .ENDING:
-            break
+            await askSkill()
         }
         await StageEnd(parent: self, player: player, stage: stage).exe()
         await end()
