@@ -14,10 +14,14 @@ import SwiftUI
     let DEBUG_MODE: Bool = false
 #endif
 
-let card_scale = 0.10
+#if os(macOS)
+let card_scale = 0.1
+#elseif os(iOS)
+let card_scale = 0.08
+#endif
 let general_card_width = 1094 * card_scale
 let general_card_height = 1534 * card_scale + 180 * card_scale
-let game_card_width =  1024 * card_scale
+let game_card_width = 1024 * card_scale
 let game_card_height = 1438 * card_scale
 
 //主遊戲的視圖模型
@@ -51,7 +55,7 @@ class GameViewModel: ObservableObject {
         for player in players {
             self.handcards.append(player.areas[Area.HANDCARD.rawValue].cardlist)
         }
-        
+
         game.onStateChange = { [weak self] in
             guard let self else { return }
             self.players = self.game.players
@@ -63,8 +67,11 @@ class GameViewModel: ObservableObject {
             self.records = self.game.records
             self.now_action = self.game.nowAction
             self.nowChoice = self.game.nowChoice
+            self.handcards = []
             for player in players {
-                self.handcards.append(player.areas[Area.HANDCARD.rawValue].cardlist)
+                self.handcards.append(
+                    player.areas[Area.HANDCARD.rawValue].cardlist
+                )
             }
         }
         game.notifyChange()
@@ -95,12 +102,14 @@ struct InGameUI: View {
                     HStack {
                         CardListUI(
                             cardlist: game.handcards[game.operating_player],
-                            width: geo.size.width - 2 * general_card_width
+                            width: geo.size.width - 2 * general_card_width,
+                            isHandCard: true,
+                            game: game
                         )
                         .padding(.vertical, 100 * card_scale)
                         Spacer()
                     }
-                }.frame(width: geo.size.width - 2 * general_card_width)
+                }.frame(width: min(geo.size.width - 2 * general_card_width,0))
                 //武將牌
                 ZStack {
                     ForEach(game.players, id: \.seat) { i in
@@ -118,13 +127,22 @@ struct InGameUI: View {
                             cardlist: game.cardList.cardlist,
                             back_up: true,
                             width: game_card_width,
-                            scroolable: false
+                            scrollable: false,
+                            game: game
                         )
                         Text(String(game.cardList.cardlist.count))
                             .foregroundStyle(.white)
                         Spacer()
                     }
                 }
+                //處理區
+                CardListUI(
+                    cardlist: game.dealingList.cardlist,
+                    width: game_card_width * Double(game.dealingList.cardlist.count),
+                    scrollable: false,
+                    isHandCard: false,
+                    game: game
+                )
             }
             //記錄顯示
             if view_record {
@@ -333,15 +351,16 @@ struct GameCardUI: View {
                     VStack(spacing: 0) {
                         Text("\(Nunber[card.number])")
                             .foregroundColor(getSuitColor(suit: card.suit))
+                            .font(.system(size: 150*card_scale))
                         Image(card.suit.rawValue)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 80 * card_scale)
+                            .frame(width: 120 * card_scale)
                         Spacer()
                     }
                     Spacer()
-                }.padding(.horizontal, 8)
-                    .padding(.vertical, 5)
+                }.padding(.horizontal, 80*card_scale)
+                    .padding(.vertical, 50*card_scale)
             }
         }
         .frame(
@@ -358,9 +377,31 @@ struct CardListUI: View {
     var cardlist: [GameCard]
     var back_up = false  //是否背面朝上
     var width: Double
-    var scroolable: Bool = true  //是否可以滾動
+    var scrollable: Bool = true  //是否可以滾動
+    var isHandCard: Bool = false  //是否是手牌
+    @ObservedObject var game: GameViewModel
+
+    func canUse(card: GameCard) -> Bool {
+        if let choice = game.nowChoice {
+            if choice.player == game.operating_player {
+                for option in choice.options {
+                    if option.type == .card && option.value == card.id {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    func getBright(card: GameCard) -> Double {
+        if isHandCard {
+            return canUse(card: card) ? 0 : -0.5
+        }
+        return 0
+    }
+
     var body: some View {
-        if scroolable {
+        if scrollable {
             ScrollView(.horizontal) {
                 HStack(spacing: 0) {
                     ForEach(
@@ -368,6 +409,15 @@ struct CardListUI: View {
                         id: \.id
                     ) { card in
                         GameCardUI(card: card, back_up: back_up)
+                            .brightness(getBright(card: card))
+                            .onTapGesture {
+                                if canUse(card: card) {
+                                    game.nowChoice!
+                                        .choose(
+                                            choosedOption: Option(card: card)
+                                        )
+                                }
+                            }
                     }
                 }
             }.frame(width: max(width, 0))
@@ -382,6 +432,7 @@ struct CardListUI: View {
             }
             .frame(width: max(width, 0), alignment: .leading)
             .clipped()
+
         }
     }
 }
@@ -416,7 +467,7 @@ struct OptionUI: View {
     var option: Option
     @ObservedObject var game: GameViewModel
     var body: some View {
-        Button(option.name){
+        Button(option.name) {
             game.nowChoice!.choose(choosedOption: option)
         }
     }
@@ -426,11 +477,11 @@ struct OptionUI: View {
 struct ChoiceUI: View {
     @ObservedObject var game: GameViewModel
     var body: some View {
-        HStack{
+        HStack {
             if let choice = game.nowChoice {
                 if choice.player == game.operating_player {
-                    ForEach(choice.options,id: \.name.hashValue){ option in
-                        if option.type != .card{
+                    ForEach(choice.options, id: \.hashValue) { option in
+                        if option.type != .card {
                             OptionUI(option: option, game: game)
                         }
                     }

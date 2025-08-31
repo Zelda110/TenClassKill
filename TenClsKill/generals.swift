@@ -57,7 +57,7 @@ class General {
 
 let WCY = General(
     name: "王成悅",
-    health: 2,
+    health: 0,
     max_health: 3,
     skills: [回血()],
     card: .wcy,
@@ -68,7 +68,7 @@ let WCY = General(
 
 let LQE = General(
     name: "劉奇恩",
-    health: 4,
+    health: 0,
     max_health: 4,
     skills: [],
     card: .lqe,
@@ -79,7 +79,7 @@ let LQE = General(
 
 let LCY = General(
     name: "劉宸驛",
-    health: 4,
+    health: 0,
     max_health: 4,
     skills: [],
     card: .lcy,
@@ -90,7 +90,7 @@ let LCY = General(
 
 let ZWX = General(
     name: "張文軒",
-    health: 3,
+    health: 0,
     max_health: 3,
     skills: [],
     card: .zwx,

@@ -149,7 +149,9 @@ class Player {
 
     func askPlayerSkill(parent: Action) async {
         var used: [Int] = []
+        var askedTime = 0
         while true {
+            askedTime += 1
             // 鎖定技自動發動
             while true {
                 var haveSkill = false
@@ -165,6 +167,9 @@ class Player {
                                 skill: skill,
                                 player: self.seat
                             ).exe()
+                            if parent is ActionPoint {
+                                return
+                            }
                             break
                         }
                     }
@@ -178,6 +183,7 @@ class Player {
             }
             //其他技能自選發動
             var skillList: [Skill] = []
+            var cardList: [GameCard] = []
             for skillGroup in self.skills {
                 for skill in skillGroup.skills {
                     if !used.contains(skill.id) && !skill.locked
@@ -187,17 +193,36 @@ class Player {
                     }
                 }
             }
-            if !skillList.isEmpty {
+            for card in self.areas[Area.HANDCARD.rawValue].cardlist {
+                var canUse = false
+                for skillGroup in card.cardName.skillGroups {
+                    for skill in skillGroup.skills {
+                        if skill.canUse(occasion: parent, player: seat) {
+                            canUse = true
+                            break
+                        }
+                    }
+                    if canUse {
+                        break
+                    }
+                }
+                if canUse {
+                    cardList.append(card)
+                }
+            }
+            if !(skillList.isEmpty && cardList.isEmpty) {
                 var optionList: [Option] = []
                 for skill in skillList {
                     optionList.append(Option(skill: skill))
                 }
+                for card in cardList {
+                    optionList.append(Option(card: card))
+                }
                 optionList.append(Option(name: "取消", value: 0))
-                let ans:(
-                    OptionType, Int
-                ) = await withCheckedContinuation { continuation in
+                let ans: (OptionType, Int) = await withCheckedContinuation {
+                    continuation in
                     Action.mainGame!.nowChoice = Choice(
-                        continuation:continuation,
+                        continuation: continuation,
                         options: optionList,
                         player: seat
                     )
@@ -212,20 +237,60 @@ class Player {
                                     skill: skill,
                                     player: seat
                                 ).exe()
+                                if parent is ActionPoint {
+                                    return
+                                }
                             }
                         }
                     }
                     continue
-                }
-                else if ans.0 == .card {
-                    //todo
-                    continue
-                }
-                else{
+                } else if ans.0 == .card {
+                    var finished = false
+                    for card in cardList {
+                        if card.id == ans.1 {
+                            for skillGroup in card.cardName.skillGroups {
+                                for skill in skillGroup.skills {
+                                    if skill.canUse(
+                                        occasion: parent,
+                                        player: seat
+                                    ) {
+                                        await UseCard(
+                                            parent: parent,
+                                            card: card,
+                                            player: seat,
+                                            skill: skill
+                                        ).exe()
+                                        if parent is ActionPoint {
+                                            return
+                                        }
+                                        finished = true
+                                        break
+                                    }
+                                }
+                                if finished {
+                                    break
+                                }
+                            }
+                            if finished {
+                                break
+                            }
+                        }
+                    }
+                    break
+                } else {
+                    if let pare = parent as? ActionPoint {
+                        let papa = pare.parent as! RunStage
+                        papa.should_end = true
+                    }
                     break
                 }
-            }
-            else{
+            } else {
+                if let pare = parent as? ActionPoint {
+                    if askedTime == 1 && pare.player == seat{
+                        let papa = pare.parent as! RunStage
+                        papa.should_end = true
+                    }
+                }
                 break
             }
         }

@@ -260,9 +260,9 @@ class RunStage: Action {
         case .DRAWING:
             await askSkill()
         case .ACTION:
-            //                        while !should_end {
-            await ActionPoint(parent: self, player: player).exe()
-        //                    }
+            while !should_end {
+                await ActionPoint(parent: self, player: player).exe()
+            }
         case .DISCARD:
             await askSkill()
         case .ENDING:
@@ -475,8 +475,8 @@ class Option {
     var type: OptionType
     var name: String
     var value: Int
-    var hash: Int {
-        self.name.hashValue ^ self.value.hashValue
+    var hashValue: Int {
+        self.name.hashValue ^ self.value.hashValue ^ self.type.hashValue
     }
 }
 
@@ -495,7 +495,9 @@ class Choice {
     var player: Int
 
     func choose(choosedOption: Option) {
-        continuation.resume(returning: (choosedOption.type, choosedOption.value))
+        continuation.resume(
+            returning: (choosedOption.type, choosedOption.value)
+        )
         Action.mainGame!.nowChoice = nil
     }
 }

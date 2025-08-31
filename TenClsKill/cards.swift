@@ -11,7 +11,7 @@ import Foundation
 struct CardName {
     var name: String  //名字
     var descripsion: String  //描述
-    var skillGroupList: [SkillGroup]  //技能
+    var skillGroups: [SkillGroup]  //技能
     var image: String  //圖片
 }
 
@@ -27,7 +27,7 @@ class Card {
     var cardName: CardName
 }
 
-//遊戲牌(實體)
+//遊戲牌
 class GameCard {
     //標準初始化
     init(info: [Card], modified: Card? = nil) {
@@ -62,50 +62,56 @@ class GameCard {
     var number: Int {
         return card.number
     }
+    var display: String {
+        return "\(cardName.name)[\(suit.rawValue) \(number)]"
+    }
     func clearModification() {
         self.modified = nil
     }
 }
 
-//class Card {
-//    init(suit: Suit, number: Int, name: CardName, realCard: Card? = nil, virtual: Bool = false) {
-//        self.id = Card.card_id
-//        Card.card_id += 1
-//        self.suit = suit
-//        self.number = number
-//        self.name = name
-//        if !virtual{
-//            if let rCard = realCard{
-//                self.realCard = rCard
-//            }
-//            else{
-//                self.realCard = self
-//            }
-//        }
-//        else{
-//            self.realCard = nil
-//        }
-//    }
-//    //全局id
-//    static var card_id: Int = 0
-//    let id: Int
-//    //花色點數
-//    var suit: Suit
-//    var number: Int
-//    //牌名
-//    var name: CardName
-//    //本體(若為轉化牌)
-//    var realCard: Card?
-//    //是否可用
-//    var can_use:Bool = false
-//
-//    func isConverted() -> Bool {
-//        if realCard === self{
-//            return false
-//        }
-//        return true
-//    }
-//}
+//使用牌
+class UseCard: Action {
+    init(parent: Action, card: GameCard, player: Int, skill: Skill) {
+        self.card = card
+        self.player = player
+        self.skill = skill
+        super.init(parent: parent)
+    }
+    override func exe() async {
+        await start()
+        await askSkill()
+        record("\(getGeneralName(player: player))使用了")
+        if card.isVirtual {
+            Action.mainGame!.dealingList.add_card(card: card)
+        }
+        else{
+            Action.mainGame!.set_card_position(
+                id: card.id,
+                from: Action.mainGame!.players[player].areas[Area.HANDCARD.rawValue],
+                to: Action.mainGame!.dealingList
+            )
+        }
+        await skill.exe(occasion: self, player: player)
+        if card.isVirtual {
+            let _ = Action.mainGame!.dealingList.remove_card(id: card.id)
+        }
+        else{
+            if let c = Action.mainGame!.dealingList.search_for_card(id: card.id){
+                c.0.clearModification()
+                Action.mainGame!.set_card_position(
+                    id: card.id,
+                    from: Action.mainGame!.dealingList,
+                    to: Action.mainGame!.discardedList
+                )
+            }
+        }
+        await end()
+    }
+    var card: GameCard
+    var player: Int
+    var skill: Skill
+}
 
 //遊戲牌技能
 class PeachActionPoint: Skill {
@@ -116,15 +122,19 @@ class PeachActionPoint: Skill {
         self.locked = false
     }
     override func canUse(occasion: Action, player: Int) -> Bool {
-        if let oca = occasion as? RunStage {
-            if oca.stage == .DRAWING && oca.player == player {
+        if let oca = occasion as? ActionPoint {
+            if oca.player == player
+                && isHurted(
+                    player: player
+                )
+            {
                 return true
             }
         }
         return false
     }
     override func exe(occasion: Action, player: Int) async {
-        await DrawCard(parent: occasion, player: player, num: 2).exe()
+        await Recover(parent: occasion, player: player, num: 1).exe()
     }
 }
 
@@ -140,6 +150,6 @@ class PeachSkill: SkillGroup {
 let PEACH = CardName(
     name: "桃",
     descripsion: "",
-    skillGroupList: [PeachSkill()],
+    skillGroups: [PeachSkill()],
     image: "peach"
 )
