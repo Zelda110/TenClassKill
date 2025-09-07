@@ -15,9 +15,9 @@ import SwiftUI
 #endif
 
 #if os(macOS)
-let card_scale = 0.1
+    let card_scale = 0.1
 #elseif os(iOS)
-let card_scale = 0.08
+    let card_scale = 0.08
 #endif
 let general_card_width = 1094 * card_scale
 let general_card_height = 1534 * card_scale + 180 * card_scale
@@ -109,7 +109,7 @@ struct InGameUI: View {
                         .padding(.vertical, 100 * card_scale)
                         Spacer()
                     }
-                }.frame(width: min(geo.size.width - 2 * general_card_width,0))
+                }.frame(width: min(geo.size.width - 2 * general_card_width, 0))
                 //武將牌
                 ZStack {
                     ForEach(game.players, id: \.seat) { i in
@@ -138,7 +138,8 @@ struct InGameUI: View {
                 //處理區
                 CardListUI(
                     cardlist: game.dealingList.cardlist,
-                    width: game_card_width * Double(game.dealingList.cardlist.count),
+                    width: game_card_width
+                        * Double(game.dealingList.cardlist.count),
                     scrollable: false,
                     isHandCard: false,
                     game: game
@@ -351,7 +352,7 @@ struct GameCardUI: View {
                     VStack(spacing: 0) {
                         Text("\(Nunber[card.number])")
                             .foregroundColor(getSuitColor(suit: card.suit))
-                            .font(.system(size: 150*card_scale))
+                            .font(.system(size: 150 * card_scale))
                         Image(card.suit.rawValue)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -359,8 +360,8 @@ struct GameCardUI: View {
                         Spacer()
                     }
                     Spacer()
-                }.padding(.horizontal, 80*card_scale)
-                    .padding(.vertical, 50*card_scale)
+                }.padding(.horizontal, 80 * card_scale)
+                    .padding(.vertical, 50 * card_scale)
             }
         }
         .frame(
@@ -420,7 +421,12 @@ struct CardListUI: View {
                             }
                     }
                 }
-            }.frame(width: max(width, 0))
+            }
+            .frame(width: max(width, 0))
+            .animation(
+                .interactiveSpring(duration: 0.2, extraBounce: 0.1),
+                value: cardlist.count
+            )
         } else {
             HStack(spacing: 0) {
                 ForEach(
@@ -431,6 +437,10 @@ struct CardListUI: View {
                 }
             }
             .frame(width: max(width, 0), alignment: .leading)
+            .animation(
+                .interactiveSpring(duration: 0.2, extraBounce: 0.1),
+                value: cardlist.count
+            )
             .clipped()
 
         }
